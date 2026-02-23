@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class main {
+public class eng_p1 {
     public static void main(String[] args) throws FileNotFoundException {
         //to store start stage
         int start = 0;
