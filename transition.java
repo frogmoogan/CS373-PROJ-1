@@ -1,12 +1,12 @@
 public class transition {
     int fromState;
-    char readSymbol; 
-    char popSymbol;
+    String readSymbol; 
+    String popSymbol;
     int toState;
     String pushSymbol;
 
     //constructor//
-    public transition(int fromState, char readSymbol, char popSymbol, 
+    public transition(int fromState, String readSymbol, String popSymbol, 
                       int toState, String pushSymbol) {
         this.fromState = fromState;
         this.readSymbol = readSymbol;

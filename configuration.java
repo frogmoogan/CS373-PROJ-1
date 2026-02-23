@@ -1,9 +1,12 @@
+import java.util.Stack;
+
 public class configuration {
     int state;
     String remainingInput;
-    String stack;
+    Stack<String> stack = new Stack<>();
 
-    public configuration(int state, String remainingInput, String stack) {
+
+    public configuration(int state, String remainingInput, Stack stack) {
         this.state = state;
         this.remainingInput = remainingInput;
         this.stack = stack;
@@ -13,15 +16,18 @@ public class configuration {
     @Override
     public String toString() {
         //change this later 
-        return "(" + state + ": " + remainingInput + " " + stack + ")";
+        return ( state + ": " + remainingInput );
     } 
-    
-    @Override
-    public boolean equals(Object o) { 
-        //change this later
-        return true;
+
+    public boolean equals(CharSequence state, String stack) { 
+        if (stack.contains(state) ){
+            return true;
+        }
+        return false;
     }
 
+    //not sure why we need this tbh
+    //means of comparison against equals ??
     @Override
     public int hashCode() { 
         //change this later
