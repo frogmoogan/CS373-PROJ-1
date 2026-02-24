@@ -15,6 +15,8 @@ public class transition {
         this.pushSymbol = pushSymbol;
     }
 
+
+
     //print func to be used for easier debugging//
     @Override
     public String toString() {

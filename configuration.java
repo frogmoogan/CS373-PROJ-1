@@ -16,7 +16,7 @@ public class configuration {
     @Override
     public String toString() {
         //change this later 
-        return ( state + ": " + remainingInput );
+        return ( "state " + state + ", " + remainingInput + " stack content: " + stack );
     } 
 
     public boolean equals(CharSequence state, String stack) { 

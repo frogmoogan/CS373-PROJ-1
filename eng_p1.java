@@ -8,11 +8,6 @@ public class eng_p1 {
         int start = 0;
         String prospect = "";
         Stack<String> currstack = new Stack<>();
-        
-        //setup initialize all the necessary data strucuts//
-        //stack for PDA logic
-        //simulation order
-        Stack<Integer> stack = new Stack<>();
 
         //for list of transitions
         //look up transitions.get(curr state) to reduce runtime
@@ -30,15 +25,16 @@ public class eng_p1 {
         HashSet <Integer> acceptstates = new HashSet<>();
 
         //keep track of generated configurations by simulate
-        ArrayList <transition> info = new ArrayList<>();
+        //ArrayList <transition> info = new ArrayList<>();
 
         //integer arrays to store what stages we accept/reject at
-        ArrayList <Integer> accept = new ArrayList<>();
-        ArrayList <Integer> reject = new ArrayList<>();        
+        HashSet <Integer> accept = new HashSet<>();
+        HashSet <Integer> reject = new HashSet<>();        
 
         //1. put all user input into Arraylist transitions
         Scanner scanner = new Scanner(new File(args[0]));
         prospect = args[1];
+        //System.out.println("String: " + prospect);
         //int counter = 1;
         
         while (scanner.hasNextLine()) {
@@ -119,54 +115,173 @@ public class eng_p1 {
         
         //based on start node, add subsequent transitions to queue
         for (transition t : transitions.get(start)) {
-            //testing correct output
-            //System.out.println("   " + t.toState);
+            Stack<String> stackcpy = new Stack<>();
+            stackcpy = currstack;
 
-            currstack.push("$");
-            configuration c = new configuration(t.toState, prospect, currstack);
-            queue.add(c);
-        }
-
-        //not sure why we used this
-        // int currstate = start;
-        while(!queue.isEmpty()){
-            
-
-        //look at  top config, 
-        //if its a possible config
-        for (configuration c: queue){
-
-        }
-        //update a copy stack n copy currStackString
-        //remove top config bc we are currently in it
-
-        //if this is an accept state and the currstack is empty, add it to list of accepted states reached
-        //clear queue n break from while loop
-
-        //for each potential transition from our hashmap of transitions
-        //generate a new config with pointer to the copy stack you made
-        //if it's not been visited already, add it to the queue
-        
-            
-        //ignore rn//
-
-            //for each valid transition:
-            //generate a new config
-            //      if not visited
-            //          add tovisited
-            //          add to queue
             /*
-            for (transition t : transitions.get(currstate)) {
-                configuration c = new configuration(t.toState, prospect, currstack);
-                queue.add(c);
+            //what are you popping?
+            if((t.popSymbol).equals("$")){
+                currstack.pop();
             }
+            else if((t.popSymbol).equals("1")){
+                currstack.pop();
+            }
+            else if((t.popSymbol).equals("0")){
+                currstack.pop();
+            }
+            //empty string case
+            else{
+                if(!currstack.isEmpty()){
+                    currstack.pop();
+                }
+                //do nothing essentially
+            }
+
+
+            //what are you pushing?
+            if((t.pushSymbol).equals("$")){
+                currstack.push("$");
+                currstack.push("E");
+            }
+            else if((t.pushSymbol).equals("1")){
+                currstack.push("1");
+            }
+            else if((t.pushSymbol).equals("0")){
+                currstack.push("0");
+            }
+            //empty string case
+            else{
+                currstack.push("E");
+                //do nothing essentially
+            }
+
+            */
+            configuration c = new configuration(t.fromState, prospect, currstack);
+            queue.add(c);
+            System.out.println("current stack at start " + c);
+        }
+
+        
+
+        //look at  top config
+        while(!queue.isEmpty()){
+        //for (configuration con: queue){
+            configuration con = queue.getFirst();
+
+            System.out.println("Current top queue config:" + con);
+            int fromState;
+            String readSymbol; 
+            String popSymbol;
+            int toState;
+            String pushSymbol;
+
+            //if you've already done this config, skip it bc its a duplicate
+            if (visited.contains(con)){
+                System.out.println("Skipped" + con);
+                queue.remove(0);
+
+            }
+            /* 
+            //edge case, no where else to go,
+            if(transitions.get(con.state).isEmpty()){
+                visited.add(con);
+            }
+            
             */
             
 
-            //having some type of safeguard for this
-            //remove curr config
-            queue.remove(0);
+            //edge case if its empty, we have finished our string
+            if ((con.remainingInput).isEmpty() || con.remainingInput.equals("E")){
 
+                //is this accept? if yes: add to accept hashset
+                for (Integer i: acceptstates){
+                    if (i.equals(con.state)){
+                        System.out.println("Added" + i + "to accept state");
+                        accept.add(i);
+                    }
+                }
+                //else, reject
+                reject.add(con.state);
+                System.out.println("Added" + con.state + "to reject state");
+            }
+            
+            //we visited it
+            visited.add(con);
+            queue.remove(0);
+            
+            //main case, we still have remaining string
+             Stack<String> stackcpy = new Stack<>();
+             
+            
+             //find the transition info
+            for (transition t : transitions.get(con.state)) {
+                //System.out.println("Finding transition info...");
+                    stackcpy = con.stack;
+                    fromState = t.fromState;
+                    readSymbol = t.readSymbol;
+                    popSymbol = t.popSymbol;
+                    toState = t.toState;
+                    pushSymbol = t.pushSymbol;
+                    remaining = con.remainingInput;
+                
+                    //valid transition
+                    //System.out.println((con.remainingInput).substring(0,1));
+                    if((con.remainingInput).substring(0,1).equals(readSymbol) || readSymbol.equals("E")){
+                    System.out.println("transition" + t + "is a valid transition");
+
+                        String temp = "";
+
+                        if(!stackcpy.isEmpty()){
+                            temp = stackcpy.pop();
+                        }
+
+                        //pop symbol must be the same
+                        if (temp.equals(popSymbol) || readSymbol.equals("E")){
+                            stackcpy.push(pushSymbol);
+                            
+                            System.out.println("pop symbol" + popSymbol + "is a valid transition");
+
+
+                            remaining = con.remainingInput.substring(1);
+                            configuration c = new configuration(toState, remaining, stackcpy);
+                            
+                            queue.add(c);
+                            //visited.add(con);
+
+                        }
+                        //invalid transition, do nothing
+
+                    }
+                    //not a valid transition, don't do anything
+                    else{
+                        System.out.println("Not a valid transition");
+                    }
+
+                    
+                    
+                }
+             
+             }
+            
+        //System.out.println("FINISHED FOR LOOP");
+
+        //print results
+        if(!accept.isEmpty()){
+            for (Integer i : accept){
+                System.out.println("accept ");
+                System.out.println(i + " ");
+            }
         }
+        else{
+            for (Integer i : reject){
+                System.out.println("reject ");
+                System.out.println(i + " ");
+            }
+        }
+        
+            
+    
     }
 }
+
+
