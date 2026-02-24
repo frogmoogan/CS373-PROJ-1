@@ -19,11 +19,17 @@ public class configuration {
         return ( "state " + state + ", " + remainingInput + " stack content: " + stack );
     } 
 
-    public boolean equals(CharSequence state, String stack) { 
-        if (stack.contains(state) ){
-            return true;
-        }
-        return false;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        configuration other = (configuration) obj;
+
+        return this.state == other.state &&
+            this.remainingInput.equals(other.remainingInput) &&
+            this.stack.equals(other.stack);
     }
 
     //not sure why we need this tbh

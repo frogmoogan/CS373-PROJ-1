@@ -158,7 +158,7 @@ public class eng_p1 {
             */
             configuration c = new configuration(t.fromState, prospect, currstack);
             queue.add(c);
-            System.out.println("current stack at start " + c);
+            //System.out.println("current stack at start " + c);
         }
 
         
@@ -168,7 +168,8 @@ public class eng_p1 {
         //for (configuration con: queue){
             configuration con = queue.getFirst();
 
-            System.out.println("Current top queue config:" + con);
+            //System.out.println("\nCurrent top queue config:" + con);
+            Stack<String> stackcpy = (Stack<String>)con.stack.clone();
             int fromState;
             String readSymbol; 
             String popSymbol;
@@ -177,93 +178,109 @@ public class eng_p1 {
 
             //if you've already done this config, skip it bc its a duplicate
             if (visited.contains(con)){
-                System.out.println("Skipped" + con);
-                queue.remove(0);
-
+                //System.out.println("Skipped" + con);
+                queue.remove(con);
+                continue;
             }
-            /* 
-            //edge case, no where else to go,
-            if(transitions.get(con.state).isEmpty()){
-                visited.add(con);
-            }
-            
-            */
-            
 
             //edge case if its empty, we have finished our string
-            if ((con.remainingInput).isEmpty() || con.remainingInput.equals("E")){
+            if ((con.remainingInput).isEmpty() && stackcpy.empty()){
 
                 //is this accept? if yes: add to accept hashset
                 for (Integer i: acceptstates){
                     if (i.equals(con.state)){
-                        System.out.println("Added" + i + "to accept state");
+                        //System.out.println("Added" + i + "to accept state");
                         accept.add(i);
                     }
+                    else{
+                        //else, reject
+                        reject.add(con.state);
+                        //System.out.println("Added" + con.state + "to reject state");
+
+                    }
                 }
-                //else, reject
-                reject.add(con.state);
-                System.out.println("Added" + con.state + "to reject state");
+                
+            
             }
             
             //we visited it
             visited.add(con);
             queue.remove(0);
-            
+
             //main case, we still have remaining string
-             Stack<String> stackcpy = new Stack<>();
              
-            
+             
+            if(transitions.containsKey(con.state)){
              //find the transition info
-            for (transition t : transitions.get(con.state)) {
+                for (transition t : transitions.get(con.state)) {
                 //System.out.println("Finding transition info...");
-                    stackcpy = con.stack;
+                    stackcpy = (Stack<String>)con.stack.clone();
                     fromState = t.fromState;
                     readSymbol = t.readSymbol;
                     popSymbol = t.popSymbol;
                     toState = t.toState;
                     pushSymbol = t.pushSymbol;
                     remaining = con.remainingInput;
+                    String compare = "";
+                    
+                    if (!remaining.isEmpty()){
+                         compare = remaining.substring(0,1);
+                    }
                 
                     //valid transition
                     //System.out.println((con.remainingInput).substring(0,1));
-                    if((con.remainingInput).substring(0,1).equals(readSymbol) || readSymbol.equals("E")){
-                    System.out.println("transition" + t + "is a valid transition");
+                    if(!remaining.isEmpty() || remaining.isEmpty() && !stackcpy.isEmpty()){
+                        if(compare.equals(readSymbol) || readSymbol.equals("E")){
+                        //System.out.println("WE TAKE" + t + "as a valid transition");
 
-                        String temp = "";
+                            //check if reading epsilon do smth
+                            if (readSymbol.equals("E")){
 
-                        if(!stackcpy.isEmpty()){
-                            temp = stackcpy.pop();
-                        }
+                            }
+                            else{
+                                remaining = con.remainingInput.substring(1);
+                            }
 
-                        //pop symbol must be the same
-                        if (temp.equals(popSymbol) || readSymbol.equals("E")){
-                            stackcpy.push(pushSymbol);
-                            
-                            System.out.println("pop symbol" + popSymbol + "is a valid transition");
+                            //popping epsilon do smth diff
+                            if(popSymbol.equals("E")){
 
+                            }
+                            else{
+                                if(!stackcpy.isEmpty()){
+                                    stackcpy.pop();
+                                }
+                            }
 
-                            remaining = con.remainingInput.substring(1);
-                            configuration c = new configuration(toState, remaining, stackcpy);
-                            
+                            //pushing epsilon do smth diff
+                            if(pushSymbol.equals("E")){
+
+                            }
+                            else{
+                                stackcpy.push(pushSymbol);
+                            }
+
+                        configuration c = new configuration(toState, remaining, stackcpy);
+                        
+                        if(!visited.contains(c)){
                             queue.add(c);
-                            //visited.add(con);
+                            //System.out.println("ADD " + c + " TO QUEUE");
+                        }
 
                         }
-                        //invalid transition, do nothing
-
+                        //not a valid transition, don't do anything
+                        else{
+                            //System.out.println("WE DO NOT TAKE" + t + "READ:" + readSymbol + "STRING: " + remaining);
+                        }
                     }
-                    //not a valid transition, don't do anything
-                    else{
-                        System.out.println("Not a valid transition");
-                    }
-
-                    
                     
                 }
+                     
+            }
              
-             }
+        }
             
-        //System.out.println("FINISHED FOR LOOP");
+            
+       // System.out.println("FINISHED FOR LOOP");
 
         //print results
         if(!accept.isEmpty()){
