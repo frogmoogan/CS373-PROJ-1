@@ -189,13 +189,13 @@ public class eng_p1 {
                 //is this accept? if yes: add to accept hashset
                 for (Integer i: acceptstates){
                     if (i.equals(con.state)){
-                        //System.out.println("Added" + i + "to accept state");
+                        System.out.println("Added" + i + "to accept state");
                         accept.add(i);
                     }
                     else{
                         //else, reject
                         reject.add(con.state);
-                        //System.out.println("Added" + con.state + "to reject state");
+                        System.out.println("Added" + con.state + "to reject state");
 
                     }
                 }
@@ -231,7 +231,7 @@ public class eng_p1 {
                     //System.out.println((con.remainingInput).substring(0,1));
                     if(!remaining.isEmpty() || remaining.isEmpty() && !stackcpy.isEmpty()){
                         if(compare.equals(readSymbol) || readSymbol.equals("E")){
-                        //System.out.println("WE TAKE" + t + "as a valid transition");
+                        System.out.println("WE TAKE" + t + "as a valid transition");
 
                             //check if reading epsilon do smth
                             if (readSymbol.equals("E")){
@@ -285,14 +285,14 @@ public class eng_p1 {
         //print results
         if(!accept.isEmpty()){
             for (Integer i : accept){
-                System.out.println("accept ");
-                System.out.println(i + " ");
+                System.out.println("accept " + i);
+                //System.out.print(i + " ");
             }
         }
         else{
             for (Integer i : reject){
-                System.out.println("reject ");
-                System.out.println(i + " ");
+                System.out.println("reject " + i);
+                //System.out.print(i + " ");
             }
         }
         
