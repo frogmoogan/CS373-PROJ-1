@@ -34,6 +34,7 @@ public class eng_p1 {
         //1. put all user input into Arraylist transitions
         Scanner scanner = new Scanner(new File(args[0]));
         prospect = args[1];
+        boolean allrejects = false;
         //System.out.println("String: " + prospect);
         //int counter = 1;
         
@@ -167,6 +168,8 @@ public class eng_p1 {
         while(!queue.isEmpty()){
         //for (configuration con: queue){
             configuration con = queue.getFirst();
+            boolean moretransitions = false;
+            //con.foundTransition = false;
 
             //System.out.println("\nCurrent top queue config:" + con);
             Stack<String> stackcpy = (Stack<String>)con.stack.clone();
@@ -175,6 +178,7 @@ public class eng_p1 {
             String popSymbol;
             int toState;
             String pushSymbol;
+            
 
             //if you've already done this config, skip it bc its a duplicate
             if (visited.contains(con)){
@@ -184,13 +188,15 @@ public class eng_p1 {
             }
 
             //edge case if its empty, we have finished our string
-            if ((con.remainingInput).isEmpty() && stackcpy.empty()){
-
+            //stackcpy does not necessarily have to be empty
+            if ((con.remainingInput).isEmpty() ){
                 //is this accept? if yes: add to accept hashset
-                for (Integer i: acceptstates){
-                    if (i.equals(con.state)){
-                        System.out.println("Added" + i + "to accept state");
-                        accept.add(i);
+                //for (Integer i: acceptstates){
+                    //if (i.equals(con.state)){
+
+                    if(acceptstates.contains(con.state)){
+                        System.out.println("Added" + con.state + "to accept state");
+                        accept.add(con.state);
                     }
                     else{
                         //else, reject
@@ -198,8 +204,7 @@ public class eng_p1 {
                         System.out.println("Added" + con.state + "to reject state");
 
                     }
-                }
-                
+                //}
             
             }
             
@@ -230,8 +235,16 @@ public class eng_p1 {
                     //valid transition
                     //System.out.println((con.remainingInput).substring(0,1));
                     if(!remaining.isEmpty() || remaining.isEmpty() && !stackcpy.isEmpty()){
-                        if(compare.equals(readSymbol) || readSymbol.equals("E")){
-                        System.out.println("WE TAKE" + t + "as a valid transition");
+                        if((compare.equals(readSymbol) && !stackcpy.isEmpty() && (stackcpy.peek().equals(popSymbol)))
+                        || (compare.equals(readSymbol) && popSymbol.equals("E"))
+                        || (readSymbol.equals("E") && popSymbol.equals("E") )
+                        || (readSymbol.equals("E") &&  remaining.isEmpty() &&!stackcpy.isEmpty() && (stackcpy.peek().equals(popSymbol)))
+                        )
+                        
+                        {
+                        System.out.println("WE TAKE" + t + "as a valid transition string:" + remaining + "pop?" + popSymbol);
+                        moretransitions = true;
+                        //con.foundTransition = true;
 
                             //check if reading epsilon do smth
                             if (readSymbol.equals("E")){
@@ -265,11 +278,35 @@ public class eng_p1 {
                             queue.add(c);
                             //System.out.println("ADD " + c + " TO QUEUE");
                         }
+                        
 
                         }
                         //not a valid transition, don't do anything
                         else{
-                            //System.out.println("WE DO NOT TAKE" + t + "READ:" + readSymbol + "STRING: " + remaining);
+
+                            System.out.println("WE DO NOT TAKE" + t );
+                            System.out.println("String" + remaining + "Compare:" + compare + "vs. readsym: " + readSymbol);
+                            
+                             /* 
+                            if (( !stackcpy.isEmpty() && (stackcpy.peek().equals(popSymbol)))){
+                                System.out.println("1 pass");
+                            }
+                            else{
+                                System.out.println("stack empty?" + stackcpy.isEmpty());
+                                System.out.println("stack top?" + stackcpy.peek());
+                                System.out.println("pop?"+ popSymbol);
+                            }
+                             
+                            if (!( popSymbol.equals("E"))){
+                                System.out.println("2 failed");
+
+                            }
+                            if (!(readSymbol.equals("E"))){
+                                System.out.println("3 failed");
+                            }
+                            */
+                                
+                            
                         }
                     }
                     
@@ -277,11 +314,18 @@ public class eng_p1 {
                      
             }
              
+            //reject no more possible transitions
+            if(!moretransitions && !con.remainingInput.isEmpty()){
+                System.out.println("Config stuck, auto add to reject");
+                reject.add(con.state);
+            }
         }
             
             
        // System.out.println("FINISHED FOR LOOP");
 
+
+       
         //print results
         if(!accept.isEmpty()){
             for (Integer i : accept){
@@ -290,11 +334,21 @@ public class eng_p1 {
             }
         }
         else{
+            System.out.print("reject ");
             for (Integer i : reject){
-                System.out.println("reject " + i);
+                
+                System.out.print(i + " ");
                 //System.out.print(i + " ");
             }
         }
+
+        //edge case no more transitions to take buut string didn't finish
+        /* 
+       if(accept.isEmpty() && !remaining.isEmpty()){
+        System.out.println("reject");
+       }
+       */
+
         
             
     

@@ -3,6 +3,7 @@ import java.util.Stack;
 public class configuration {
     int state;
     String remainingInput;
+    //boolean foundTransition;
     Stack<String> stack = new Stack<>();
 
 
