@@ -195,13 +195,13 @@ public class eng_p1 {
                     //if (i.equals(con.state)){
 
                     if(acceptstates.contains(con.state)){
-                        System.out.println("Added" + con.state + "to accept state");
+                        //System.out.println("Added" + con.state + "to accept state");
                         accept.add(con.state);
                     }
                     else{
                         //else, reject
                         reject.add(con.state);
-                        System.out.println("Added" + con.state + "to reject state");
+                        //System.out.println("Added" + con.state + "to reject state");
 
                     }
                 //}
@@ -284,8 +284,8 @@ public class eng_p1 {
                         //not a valid transition, don't do anything
                         else{
 
-                            System.out.println("WE DO NOT TAKE" + t );
-                            System.out.println("String" + remaining + "Compare:" + compare + "vs. readsym: " + readSymbol);
+                            //System.out.println("WE DO NOT TAKE" + t );
+                            //System.out.println("String" + remaining + "Compare:" + compare + "vs. readsym: " + readSymbol);
                             
                              /* 
                             if (( !stackcpy.isEmpty() && (stackcpy.peek().equals(popSymbol)))){
@@ -346,7 +346,7 @@ public class eng_p1 {
         /* 
        if(accept.isEmpty() && !remaining.isEmpty()){
         System.out.println("reject");
-       }
+       }x
        */
 
         

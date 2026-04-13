@@ -1,0 +1,49 @@
+state	0	start
+state	1
+state	2
+state	3
+state	4
+state	5	accept
+state	6
+state	7
+state	8
+state	9
+state	10
+state	11
+state	12
+state	13
+state	14
+state	15
+transition	2	0	0	2	E
+transition	2	1	1	2	E
+transition	2	2	2	2	E
+transition	2	E	f	2	g
+transition	8	E	E	9	d
+transition	11	E	E	2	0
+transition	1	E	E	2	s
+transition	10	E	E	2	2
+transition	2	E	s	3	E
+transition	0	E	E	1	$
+transition	2	E	f	13	2
+transition	4	E	E	2	a
+transition	2	E	g	15	g
+transition	2	E	s	2	f
+transition	14	E	E	2	0
+transition	2	E	c	7	c
+transition	13	E	E	14	f
+transition	3	E	E	6	d
+transition	9	E	E	2	1
+transition	2	E	d	8	2
+transition	6	E	E	2	c
+transition	15	E	E	2	1
+transition	2	E	a	2	E
+transition	2	E	b	2	E
+transition	2	E	c	2	E
+transition	2	E	d	2	E
+transition	7	E	E	2	0
+transition	2	E	g	2	E
+transition	2	E	a	12	1
+transition	2	E	$	5	E
+transition	3	E	E	4	b
+transition	12	E	E	11	a
+transition	2	E	b	10	b
