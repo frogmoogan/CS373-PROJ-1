@@ -119,44 +119,6 @@ public class eng_p1 {
             Stack<String> stackcpy = new Stack<>();
             stackcpy = currstack;
 
-            /*
-            //what are you popping?
-            if((t.popSymbol).equals("$")){
-                currstack.pop();
-            }
-            else if((t.popSymbol).equals("1")){
-                currstack.pop();
-            }
-            else if((t.popSymbol).equals("0")){
-                currstack.pop();
-            }
-            //empty string case
-            else{
-                if(!currstack.isEmpty()){
-                    currstack.pop();
-                }
-                //do nothing essentially
-            }
-
-
-            //what are you pushing?
-            if((t.pushSymbol).equals("$")){
-                currstack.push("$");
-                currstack.push("E");
-            }
-            else if((t.pushSymbol).equals("1")){
-                currstack.push("1");
-            }
-            else if((t.pushSymbol).equals("0")){
-                currstack.push("0");
-            }
-            //empty string case
-            else{
-                currstack.push("E");
-                //do nothing essentially
-            }
-
-            */
             configuration c = new configuration(t.fromState, prospect, currstack);
             queue.add(c);
             //System.out.println("current stack at start " + c);
@@ -235,14 +197,16 @@ public class eng_p1 {
                     //valid transition
                     //System.out.println((con.remainingInput).substring(0,1));
                     if(!remaining.isEmpty() || remaining.isEmpty() && !stackcpy.isEmpty()){
+                        //removed remaining.isempty from last statement to see if that makes a difference??
                         if((compare.equals(readSymbol) && !stackcpy.isEmpty() && (stackcpy.peek().equals(popSymbol)))
                         || (compare.equals(readSymbol) && popSymbol.equals("E"))
                         || (readSymbol.equals("E") && popSymbol.equals("E") )
-                        || (readSymbol.equals("E") &&  remaining.isEmpty() &&!stackcpy.isEmpty() && (stackcpy.peek().equals(popSymbol)))
-                        )
+                        || (readSymbol.equals("E") &&!stackcpy.isEmpty() && (stackcpy.peek().equals(popSymbol)))
+                 
+                    )
                         
                         {
-                        System.out.println("WE TAKE" + t + "as a valid transition string:" + remaining + "pop?" + popSymbol);
+                        //System.out.println("WE TAKE" + t + "as a valid transition string:" + remaining + "pop?" + popSymbol);
                         moretransitions = true;
                         //con.foundTransition = true;
 
@@ -284,7 +248,7 @@ public class eng_p1 {
                         //not a valid transition, don't do anything
                         else{
 
-                            //System.out.println("WE DO NOT TAKE" + t );
+                            //System.out.println("WE DO NOT TAKE" + t + "string:" + remaining + "pop?" + popSymbol);
                             //System.out.println("String" + remaining + "Compare:" + compare + "vs. readsym: " + readSymbol);
                             
                              /* 
@@ -315,8 +279,8 @@ public class eng_p1 {
             }
              
             //reject no more possible transitions
-            if(!moretransitions && !con.remainingInput.isEmpty()){
-                System.out.println("Config stuck, auto add to reject");
+            if(!moretransitions && con.remainingInput.isEmpty()){
+                //System.out.println("Config stuck, auto add to reject");
                 reject.add(con.state);
             }
         }
@@ -325,11 +289,17 @@ public class eng_p1 {
        // System.out.println("FINISHED FOR LOOP");
 
 
-       
+       //edge case no more transitions to take buut string didn't finish
+       /* 
+       if(accept.isEmpty() && !remaining.isEmpty()){
+        System.out.println("reject");
+       }
+       */
         //print results
         if(!accept.isEmpty()){
+            System.out.print("accept ");
             for (Integer i : accept){
-                System.out.println("accept " + i);
+                System.out.print(i + " ");
                 //System.out.print(i + " ");
             }
         }
@@ -342,12 +312,7 @@ public class eng_p1 {
             }
         }
 
-        //edge case no more transitions to take buut string didn't finish
-        /* 
-       if(accept.isEmpty() && !remaining.isEmpty()){
-        System.out.println("reject");
-       }x
-       */
+        
 
         
             
